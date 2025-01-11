@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin: User Information</h1>
+        <ol id="userList"></ol>
+    </div>
+
+    <script>
+        fetch('data.json')
+            .then(response => response.json())
+            .then(data => {
+                const userList = document.getElementById('userList');
+                data.users.forEach((user, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `#${index + 1} - Username: ${user.username}, Password: ${user.password}`;
+                    userList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching JSON:', error));
+    </script>
+</body>
+</html>
