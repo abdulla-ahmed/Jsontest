@@ -3,58 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login System with Admin View</title>
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Login</h1>
-    <form id="loginForm">
-        <label for="username">Username:</label>
-        <input type="text" id="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-    <div id="status"></div>
-
-    <h1>Admin Panel</h1>
-    <button id="adminView">View All Users (Admin Only)</button>
-    <pre id="adminData" style="display:none; border: 1px solid #ccc; padding: 10px;"></pre>
+    <div class="container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <p id="status"></p>
+        <button id="register">Register</button>
+        <button id="admin">Recall Information (Admin Only)</button>
+    </div>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            // Fetch JSON data
             fetch('data.json')
                 .then(response => response.json())
                 .then(data => {
                     const user = data.users.find(user => user.username === username && user.password === password);
-                    const statusDiv = document.getElementById('status');
+                    const status = document.getElementById('status');
                     if (user) {
-                        statusDiv.textContent = 'Login successful! Your username and password are correct.';
+                        // Redirect to the welcome page with the user's name
+                        window.location.href = `welcome.html?username=${username}`;
                     } else {
-                        statusDiv.textContent = 'Login failed! Incorrect username or password.';
+                        status.textContent = 'Login failed! Incorrect username or password.';
                     }
                 })
                 .catch(error => console.error('Error fetching JSON:', error));
         });
 
-        document.getElementById('adminView').addEventListener('click', () => {
+        document.getElementById('register').addEventListener('click', () => {
+            window.location.href = 'register.html';
+        });
+
+        document.getElementById('admin').addEventListener('click', () => {
             const adminPassword = prompt("Enter admin password:");
-            if (adminPassword === "admin123") { // Replace with a secure password
-                fetch('data.json')
-                    .then(response => response.json())
-                    .then(data => {
-                        const adminDataDiv = document.getElementById('adminData');
-                        adminDataDiv.textContent = JSON.stringify(data, null, 2);
-                        adminDataDiv.style.display = 'block';
-                    })
-                    .catch(error => console.error('Error fetching JSON:', error));
+            if (adminPassword === "admin123") { // Admin access
+                window.location.href = 'admin.html';
             } else {
                 alert('Access denied! Incorrect admin password.');
             }
